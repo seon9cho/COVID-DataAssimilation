@@ -1,10 +1,8 @@
 # SIR model for COVID prediction
 
-## Compartmental models
+## Brief description of the SIR model from [Wikipedia](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology)
 
 Compartmental models are a very general modelling technique. They are often applied to the mathematical modelling of infectious diseases. The population is assigned to compartments with labels – for example, S, I, or R, (Susceptible, Infectious, or Recovered). People may progress between compartments. 
-
-## The SIR model
 
 The SIR model is one of the simplest compartmental models, and many models are derivatives of this basic form. The model consists of three compartments:
 
@@ -32,7 +30,21 @@ As implied by the variable function of t, the model is dynamic in that the numbe
   | Yellow=Susceptible, Maroon=Infectious, Teal=Recovered |
 </div>
 
-from [Wikipedia](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology)
+## The SIR Model as a System of Differential Equations
+
+The SIR model is given by
+
+$`
+\begin{align} 
+  \begin{split} 
+    S'&= -kSI\\ 
+    I'&= kSI-qI\\
+    R'&= qI
+  \end{split}
+\end{align}
+`$
+
+subject to $S+I+R=1$, where $S$ represents the proportion of the total population that is susceptible to the disease, $I$ represents the proportion of the total population that is infected, and $R$ represents the proportion of the total population that is recovered from the disease. At each time step, the susceptible ($S$) population will decrease as they interact with the infectious ($I$) population by a factor of $k$. Those that are newly infected will move from the susceptible ($S$) population to the infectious ($I$) population. A proportion ($q$) of the infectious ($I$) population will recover from the disease at each time step as well, hence moving from the infectious ($I$) population to the recovered ($R$) population. This simple model assumes that no one infected will die and will all eventually recover. It also assumes that those once recovered from the disease cannot be susceptible with it again. Each population is represented as a percentage of the total, hence $S+I+R=1$.
 
 
 
