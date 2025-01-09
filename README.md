@@ -1,4 +1,4 @@
-COVID prediction
+# COVID prediction
 
 ## Brief description of the SIR model from [Wikipedia](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology)
 
