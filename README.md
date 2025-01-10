@@ -1,4 +1,4 @@
-# COVID prediction
+# Prediting COVID with Data Assimilation 
 
 ## Brief description of the SIR model from [Wikipedia](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology)
 
@@ -46,7 +46,23 @@ $`
 
 subject to $S+I+R=1$, where $S$ represents the proportion of the total population that is susceptible to the disease, $I$ represents the proportion of the total population that is infected, and $R$ represents the proportion of the total population that is recovered from the disease. At each time step, the susceptible ($S$) population will decrease as they interact with the infectious ($I$) population by a factor of $k$. Those that are newly infected will move from the susceptible ($S$) population to the infectious ($I$) population. A proportion ($q$) of the infectious ($I$) population will recover from the disease at each time step as well, hence moving from the infectious ($I$) population to the recovered ($R$) population. This simple model assumes that no one infected will die and will all eventually recover. It also assumes that those once recovered from the disease cannot be susceptible with it again. Each population is represented as a percentage of the total, hence $S+I+R=1$.
 
-The parameters $k$ and $q$ can either be scalar values or functions of time. In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values and the goal is to estimate the true values for the parameters $k$ and $q$, as well as the true initial values for each population group, $S_0$, $I_0$, and $R_0$. This can be done by minimizing the cost functional $`J = \frac{1}{2} {\large\int}\!_0^T (I - I^{obs})^2 + (R - R^{obs})^2 dt`$ &mdash; the $L^2$-distance between the observation and the model prediction &mdash; using calculus of variation, specifically the adjoint method. To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be written as $\overline{u} = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$.
+## Calculus of Variation: Simple Case
+
+In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values and the goal is to estimate the true values for the parameters $k$ and $q$, as well as the true initial values for each population group, $S_0$, $I_0$, and $R_0$. This can be done by minimizing the cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$ &mdash; the $L^2$-distance between the observation and the model prediction &mdash; using calculus of variation, specifically the adjoint method ($`\tau = \{t: 0 \leq t \leq T\}`$). To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be written as $\overline{u} = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$. The augmented cost functional is then the Lagrangian, $J^{*} = J + <\overline{p}, \overline{u}>$, where the adjoint variable $\overline{p}$ can be viewed as the Lagrange multiplier.
+
+The augmented cost functional can then be fully written out as:
+
+$`
+\begin{align} 
+  \begin{split} 
+    J^{*} = &\frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt\\ 
+    &+ P_S {\large\int}_\tau S\,' + kSI \,dt\\
+    &+ P_I {\large\int}_\tau I\,' - kSI + qI \,dt\\
+    &+ P_R {\large\int}_\tau R\,' - qI \,dt
+  \end{split}
+\end{align}
+`$
+
 
 
 
