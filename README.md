@@ -46,8 +46,7 @@ $`
 
 subject to $S+I+R=1$, where $S$ represents the proportion of the total population that is susceptible to the disease, $I$ represents the proportion of the total population that is infected, and $R$ represents the proportion of the total population that is recovered from the disease. At each time step, the susceptible ($S$) population will decrease as they interact with the infectious ($I$) population by a factor of $k$. Those that are newly infected will move from the susceptible ($S$) population to the infectious ($I$) population. A proportion ($q$) of the infectious ($I$) population will recover from the disease at each time step as well, hence moving from the infectious ($I$) population to the recovered ($R$) population. This simple model assumes that no one infected will die and will all eventually recover. It also assumes that those once recovered from the disease cannot be susceptible with it again. Each population is represented as a percentage of the total, hence $S+I+R=1$.
 
-
-
+The parameters $k$ and $q$ can either be scalar values or functions of time. In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values and the goal is to use Calculus of Variation, specifically the adjoint method in order to estimate the true values for the parameters $k$ and $q$, as well as the true initial values for each population group, $S_0$, $I_0$, and $R_0$. This can be done by minimizing the cost functional $`J = \frac{1}{2} \iint_0^T (I - I^{obs})^2 + (R - R^{obs})^2 dt`$
 
 
 
