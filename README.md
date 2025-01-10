@@ -37,16 +37,16 @@ The SIR model is given by
 $`
 \begin{align} 
   \begin{split} 
-    S'&= -kSI\\ 
-    I'&= kSI-qI\\
-    R'&= qI
+    S\,'&= -kSI\\ 
+    I\,'&= kSI-qI\\
+    R\,'&= qI
   \end{split}
 \end{align}
 `$
 
 subject to $S+I+R=1$, where $S$ represents the proportion of the total population that is susceptible to the disease, $I$ represents the proportion of the total population that is infected, and $R$ represents the proportion of the total population that is recovered from the disease. At each time step, the susceptible ($S$) population will decrease as they interact with the infectious ($I$) population by a factor of $k$. Those that are newly infected will move from the susceptible ($S$) population to the infectious ($I$) population. A proportion ($q$) of the infectious ($I$) population will recover from the disease at each time step as well, hence moving from the infectious ($I$) population to the recovered ($R$) population. This simple model assumes that no one infected will die and will all eventually recover. It also assumes that those once recovered from the disease cannot be susceptible with it again. Each population is represented as a percentage of the total, hence $S+I+R=1$.
 
-The parameters $k$ and $q$ can either be scalar values or functions of time. In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values and the goal is to use Calculus of Variation, specifically the adjoint method in order to estimate the true values for the parameters $k$ and $q$, as well as the true initial values for each population group, $S_0$, $I_0$, and $R_0$. This can be done by minimizing the cost functional $`J = \frac{1}{2} \iint_0^T (I - I^{obs})^2 + (R - R^{obs})^2 dt`$
+The parameters $k$ and $q$ can either be scalar values or functions of time. In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values and the goal is to estimate the true values for the parameters $k$ and $q$, as well as the true initial values for each population group, $S_0$, $I_0$, and $R_0$. This can be done by minimizing the cost functional $`J = \frac{1}{2} {\large\int}\!_0^T (I - I^{obs})^2 + (R - R^{obs})^2 dt`$ &mdash; the $L^2$-distance between the observation and the model prediction &mdash; using calculus of variation, specifically the adjoint method. To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be written as $\overline{u} = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$.
 
 
 
