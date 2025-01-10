@@ -44,11 +44,15 @@ $`
 \end{align}
 `$
 
-subject to $S+I+R=1$, where $S$ represents the proportion of the total population that is susceptible to the disease, $I$ represents the proportion of the total population that is infected, and $R$ represents the proportion of the total population that is recovered from the disease. At each time step, the susceptible ($S$) population will decrease as they interact with the infectious ($I$) population by a factor of $k$. Those that are newly infected will move from the susceptible ($S$) population to the infectious ($I$) population. A proportion ($q$) of the infectious ($I$) population will recover from the disease at each time step as well, hence moving from the infectious ($I$) population to the recovered ($R$) population. This simple model assumes that no one infected will die and will all eventually recover. It also assumes that those once recovered from the disease cannot be susceptible with it again. Each population is represented as a percentage of the total, hence $S+I+R=1$.
+subject to $S+I+R=1$, where $S$ represents the proportion of the total population that is susceptible to the disease, $I$ represents the proportion of the total population that is infected, and $R$ represents the proportion of the total population that is recovered from the disease. 
+
+At each time step, the susceptible ($S$) population will decrease as they interact with the infectious ($I$) population by a factor of $k$. Those that are newly infected will move from the susceptible ($S$) population to the infectious ($I$) population. A proportion ($q$) of the infectious ($I$) population will recover from the disease at each time step as well, hence moving from the infectious ($I$) population to the recovered ($R$) population. This simple model assumes that no one infected will die and will all eventually recover. It also assumes that those once recovered from the disease cannot be susceptible with it again. Each population is represented as a percentage of the total, hence $S+I+R=1$.
 
 ## Calculus of Variation: Simple Case
 
-In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values and the goal is to estimate the true values for the parameters $k$ and $q$, as well as the true initial values for each population group, $S_0$, $I_0$, and $R_0$. This can be done by minimizing the cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$ &mdash; the $L^2$-distance between the observation and the model prediction &mdash; using calculus of variation, specifically the adjoint method ($`\tau = \{t: 0 \leq t \leq T\}`$). To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be written as $\overline{u} = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$. The augmented cost functional is then the Lagrangian, $J^{*} = J + <\overline{p}, \overline{u}>$, where the adjoint variable $\overline{p}$ can be viewed as the Lagrange multiplier.
+In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values. The objective is to choose the model parameters $k$ and $q$, as well as the initial values for each population group, $S_0$, $I_0$, and $R_0$ such that it minimizes the cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$ &mdash; the $L^2$-distance between the observation and the model prediction &mdash; using calculus of variation, specifically the adjoint method ($`\tau = \{t: 0 \leq t \leq T\}`$). 
+
+To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be written as $\overline{u} = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$. The augmented cost functional is then the Lagrangian, $J^{*} = J + <\overline{p}, \overline{u}>$, where the adjoint variable $\overline{p}$ can be viewed as the Lagrange multiplier.
 
 The augmented cost functional can then be fully written out as:
 
@@ -56,14 +60,46 @@ $`
 \begin{align} 
   \begin{split} 
     J^{*} = &\frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt\\ 
-    &+ P_S {\large\int}_\tau S\,' + kSI \,dt\\
-    &+ P_I {\large\int}_\tau I\,' - kSI + qI \,dt\\
-    &+ P_R {\large\int}_\tau R\,' - qI \,dt
+    &+ {\large\int}_\tau p_S (S\,' + kSI) \,dt\\
+    &+ {\large\int}_\tau p_I (I\,' - kSI + qI) \,dt\\
+    &+ {\large\int}_\tau p_R (R\,' - qI) \,dt
   \end{split}
 \end{align}
 `$
 
+We then take the first variation of the augmented functional $J^*$ to obtain:
 
+$`
+\begin{align} 
+  \begin{split} 
+    \delta J^{*} = &{\large\int}_\tau (I - I^{obs})\delta I + (R - R^{obs})\delta R \,dt\\ 
+    &+ {\large\int}_\tau p_S \delta S\,' \,dt\\
+    &+ {\large\int}_\tau p_S \delta (kSI) \,dt\\
+    &+ {\large\int}_\tau p_I \delta I\,' \,dt\\
+    &- {\large\int}_\tau p_I \delta (kSI) \,dt\\
+    &+ {\large\int}_\tau p_I \delta (qI) \,dt\\
+    &+ {\large\int}_\tau p_R \delta R\,' \,dt\\
+    &- {\large\int}_\tau p_R \delta(qI) \,dt
+  \end{split}
+\end{align}
+`$
+
+Here, we are applying a small perturbation with respect to the two parameters $k$ and $q$, so $\delta \overline{u}$ can be understood as $`\delta \overline{u} = \lim\limits_{\alpha \to 0} {\Large\frac{\overline{u}(k + \alpha \delta k, q + \alpha \delta q) - u(k, q)}{\alpha}}`$.
+
+Some of the integrals can be simplified using integration by parts:
+
+$`
+\begin{align}
+  \begin{split}
+    {\large\int}_\tau p_S \delta S\,' \,dt &= {\large\int}_\tau p_S\!' \delta S \,dt + p_S \delta S \, {\Huge\textbar}_\tau\\
+    &= {\large\int}_\tau p_S\!' \delta S \,dt + p_S(T) \delta S_T - p_S(0) \delta S_0\\
+    {\large\int}_\tau p_I \delta I\,' \,dt &= {\large\int}_\tau p_I\!' \delta I \,dt + p_I(T) \delta I_T - p_I(0) \delta I_0\\
+    {\large\int}_\tau p_R \delta R\,' \,dt &= {\large\int}_\tau p_R\!' \delta R \,dt + p_R(T) \delta R_T - p_R(0) \delta R_0\\
+    {\large\int}_\tau (p_S - p_I) \delta (kSI) \,dt &= {\large\int}_\tau (p_S - p_I) k(I\delta S + S \delta I) \,dt + {\large\int}_\tau (p_S - p_I) SI \delta k \,dt\\
+    {\large\int}_\tau (p_I - p_R) \delta (qI) \,dt &= {\large\int}_\tau (p_S - p_R)(I \delta q + q \delta I) \,dt
+  \end{split}
+\end{align}
+`$
 
 
 
