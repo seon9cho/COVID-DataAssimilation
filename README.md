@@ -86,6 +86,8 @@ $`
 
 Here, we are applying a small perturbation with respect to the two parameters $k$ and $q$, so $\delta \overline{u}$ can be understood as $`\delta \overline{u} = \lim\limits_{\alpha \to 0} {\Large\frac{\overline{u}(k + \alpha \delta k, q + \alpha \delta q) - u(k, q)}{\alpha}}`$.
 
+Note that $\delta S + \delta I + \delta R = 0$ and hence $\delta S = - \delta I - \delta R$.
+
 Some of the integrals can be simplified using integration by parts:
 
 $`
@@ -96,10 +98,54 @@ $`
     {\large\int}_\tau p_I \delta I\,' \,dt &= {\large\int}_\tau p_I\!' \delta I \,dt + p_I(T) \delta I_T - p_I(0) \delta I_0\\
     {\large\int}_\tau p_R \delta R\,' \,dt &= {\large\int}_\tau p_R\!' \delta R \,dt + p_R(T) \delta R_T - p_R(0) \delta R_0\\
     {\large\int}_\tau (p_S - p_I) \delta (kSI) \,dt &= {\large\int}_\tau (p_S - p_I) k(I\delta S + S \delta I) \,dt + {\large\int}_\tau (p_S - p_I) SI \delta k \,dt\\
-    {\large\int}_\tau (p_I - p_R) \delta (qI) \,dt &= {\large\int}_\tau (p_S - p_R)(I \delta q + q \delta I) \,dt
+    {\large\int}_\tau (p_I - p_R) \delta (qI) \,dt &= {\large\int}_\tau (p_I - p_R)(I \delta q + q \delta I) \,dt
   \end{split}
 \end{align}
 `$
 
+Putting them all back together, we have:
+
+$`
+\begin{align} 
+  \begin{split} 
+    \delta J^{*} = &{\large\int}_\tau (I - I^{obs})\delta I + (R - R^{obs})\delta R \,dt\\ 
+    &- {\large\int}_\tau p_S\!' \delta S \,dt - {\large\int}_\tau p_I\!' \delta I \,dt - {\large\int}_\tau p_R\!' \delta R \,dt\\
+    &+ {\large\int}_\tau (p_S - p_I) k(I\delta S + S \delta I) + (p_S - p_I) SI \delta k \,dt\\
+    &+ {\large\int}_\tau (p_I - p_R) q \delta I + (p_I - p_R) I \delta q \,dt\\
+    &+ p_S(T) \delta S_T + p_I(T) \delta I_T + p_R (T) \delta R_T\\
+    &- p_S(0) \delta S_0 + p_I(0) \delta I_0 + p_R (0) \delta R_0
+  \end{split}
+\end{align}
+`$
+
+Rearranging the terms gives us:
+
+$`
+\begin{align} 
+  \begin{split} 
+    \delta J^{*} = &{\large\int}_\tau (kI(p_S - p_I) - p_S\!')\delta S \,dt\\
+    &+ {\large\int}_\tau (I - I^{obs} + kS(p_S - p_I) + q(p_I - p_R) - p_I\!') \delta I \,dt\\
+    &+ {\large\int}_\tau (R - R^{obs} - p_R\!') \delta R \,dt\\
+    &+ {\large\int}_\tau SI (p_S - p_I) \delta k \,dt\\
+    &+ {\large\int}_\tau I (p_I - p_R) \delta q \,dt\\
+    &+ p_S(T) \delta S_T + p_I(T) \delta I_T + p_R (T) \delta R_T\\
+    &- p_S(0) \delta S_0 + p_I(0) \delta I_0 + p_R (0) \delta R_0
+  \end{split}
+\end{align}
+`$
+
+This gives us the following adjoint model:
+
+$`
+\begin{align}
+  \begin{split}
+    p_S\!' &= kI(p_S - p_I)\\
+    p_I\!' &= I - I^{obs} + kS(p_S - p_I) + q(p_I - p_R)\\
+    p_R\!' &= R - R^{obs}
+  \end{split}
+\end{align}
+`$
+
+with the boundary conditions $`p_S(T) = p_I(T) = p_R(T) = 0`$.
 
 
