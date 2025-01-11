@@ -52,7 +52,7 @@ At each time step, the susceptible ($S$) population will decrease as they intera
 
 In a simpler model shown in [SIR tutorial](SIR_tutorial.ipynb), $k$ and $q$ are assumed to be scalar values. The objective is to choose the model parameters $k$ and $q$, as well as the initial values for each population group, $S_0$, $I_0$, and $R_0$ such that it minimizes the cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$ &mdash; the $L^2$-distance between the observation and the model prediction &mdash; using calculus of variation, specifically the adjoint method ($`\tau = \{t: 0 \leq t \leq T\}`$). 
 
-To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be written as $\overline{u} = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$. The augmented cost functional is then the Lagrangian, $J^{*} = J + <\overline{p}, \overline{u}>$, where the adjoint variable $\overline{p}$ can be viewed as the Lagrange multiplier.
+To do this, we first augment the functional with a [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier). Moving the RHS of the SIR model and setting each equation to 0, the problem can be rewritten as $u = 0$, where $`u_1 = S\,' + kSI`$, $`u_2 = I\,' - kSI + qI`$, and $`u_3 = R\,' - qI`$. The augmented cost functional is then the Lagrangian, $J^{*} = J + \langle p, u \rangle$, where the adjoint variable $p$ is a Lagrange multiplier.
 
 The augmented cost functional can then be fully written out as:
 
@@ -84,7 +84,7 @@ $`
 \end{align}
 `$
 
-Here, we are applying a small perturbation with respect to the two parameters $k$ and $q$, so $\delta \overline{u}$ can be understood as $`\delta \overline{u} = \lim\limits_{\alpha \to 0} {\Large\frac{\overline{u}(k + \alpha \delta k, q + \alpha \delta q) - u(k, q)}{\alpha}}`$.
+Here, we are applying a small perturbation $\alpha$ with respect to the parameters $k$, $q$, $S_0$, $I_0$, and $R_0$, so $\delta u$ can be understood as $`\delta u = \lim\limits_{\alpha \to 0} {\Large\frac{\tilde{u} - u}{\alpha}}`$, where $\tilde{u}$ is the perturbed solution of $u$.
 
 Note that $\delta S + \delta I + \delta R = 0$ and hence $\delta S = - \delta I - \delta R$.
 
@@ -113,7 +113,7 @@ $`
     &+ {\large\int}_\tau (p_S - p_I) k(I\delta S + S \delta I) + (p_S - p_I) SI \delta k \,dt\\
     &+ {\large\int}_\tau (p_I - p_R) q \delta I + (p_I - p_R) I \delta q \,dt\\
     &+ p_S(T) \delta S_T + p_I(T) \delta I_T + p_R (T) \delta R_T\\
-    &- p_S(0) \delta S_0 + p_I(0) \delta I_0 + p_R (0) \delta R_0
+    &- p_S(0) \delta S_0 - p_I(0) \delta I_0 - p_R (0) \delta R_0
   \end{split}
 \end{align}
 `$
@@ -129,7 +129,7 @@ $`
     &+ {\large\int}_\tau SI (p_S - p_I) \delta k \,dt\\
     &+ {\large\int}_\tau I (p_I - p_R) \delta q \,dt\\
     &+ p_S(T) \delta S_T + p_I(T) \delta I_T + p_R (T) \delta R_T\\
-    &- p_S(0) \delta S_0 + p_I(0) \delta I_0 + p_R (0) \delta R_0
+    &- p_S(0) \delta S_0 - p_I(0) \delta I_0 - p_R (0) \delta R_0
   \end{split}
 \end{align}
 `$
@@ -148,4 +148,33 @@ $`
 
 with the boundary conditions $`p_S(T) = p_I(T) = p_R(T) = 0`$.
 
+When the adjoint model is satisfied, we are left with the following:
 
+$`
+\begin{align} 
+  \begin{split} 
+    \delta J^{*} = &{\large\int}_\tau SI (p_S - p_I) \delta k \,dt\\
+    &+ {\large\int}_\tau I (p_I - p_R) \delta q \,dt\\
+    &- p_S(0) \delta S_0\\
+    &- p_I(0) \delta I_0\\
+    &- p_R (0) \delta R_0\\
+    \quad\quad = & \langle \nabla_m J, \delta m \rangle
+  \end{split}
+\end{align}
+`$
+
+where $m$ is the vector containing all of the model parameters. This gives us the desired gradients for each of the input parameters:
+
+$`
+\begin{align} 
+  \begin{split} 
+    \nabla_{S_0} J &= -p_S(0)\\
+    \nabla_{I_0} J &= -p_I(0)\\
+    \nabla_{R_0} J &= -p_R(0)\\
+    \nabla_{k} J &= SI (p_S - p_I)\\
+    \nabla_{q} J &= I (p_I - p_R)
+  \end{split}
+\end{align}
+`$
+
+Using these gradient values, the parameters can be found by using gradient descent algorithm.
