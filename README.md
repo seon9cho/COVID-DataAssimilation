@@ -183,13 +183,11 @@ Using these gradient values, the parameters can be found numerically by using gr
 
 In this project, we apply the data assimilation techinques outlined in the previous section on a real world data, specifically the COVID-19 data from the Salt Lake County. This data is open source and is availalbe online. The objective of this project is to use the Salt Lake County COVID data to see if the final model could predict the holiday spike of COVID cases that occured in the weeks between December of 2021 and January of 2022. 
 
-<img align="left" src="graphics/modified/new_case.png" width="400">
+<img align="right" src="graphics/modified/new_case.png" width="400">
 
 ### Details of the data
 
 The data used for COVID modeling is the summary of new cases per week from the Salt Lake County. This data simply tells us how many new COVID cases occurred during a specified week, between March of 2020 all the way up til September of 2023. For this project, however, only the data up til December 12th of 2021 was used as the training data, and the 5 weeks between December 19th of 2021 to January 19th of 2022 was used as the test data. There was an abnormally high spike in COVID cases during that time as a result of winter holidays, and the task was to see whether it was possible to predict that given the potential spike that happened the year before. 
-
-<br>
 
 ### SIR Model 
 
