@@ -189,6 +189,22 @@ In this project, we apply the data assimilation techinques outlined in the previ
 
 The data used for COVID modeling is the summary of new cases per week from the Salt Lake County. This data simply tells us how many new COVID cases occurred during a specified week, between March of 2020 all the way up til September of 2023. For this project, however, only the data up til December 12th of 2021 was used as the training data, and the 5 weeks between December 19th of 2021 to January 19th of 2022 was used as the test data. There was an abnormally high spike in COVID cases during that time as a result of winter holidays, and the task was to see whether it was possible to predict that given the potential spike that happened the year before. 
 
+### SIR Model 
 
+For this task, the same SIR model that was outlined in the previous section is used to model the Salt Lake County population with one small change: the parameters $k$ and $q$ are now treated as functions of time, $k(t)$ and $q(t)$ instead as a scalar value. Now, in order to use the SIR model, we must have datapoints for the S, I, and R populations. However, since we only have data for the new cases of a given week, we must generate the 3 population data. 
+
+Since the new cases data only those that are newly infected in a specified week, it can be interpreted as the $-S\,'$ data. From this, we can generate the desired S, I, and R data with a few simple assumptions. The first assumption we make is that the total population of the Salt Lake County is 1 million. This is a round down estimate of the 2020 [census](https://www.census.gov/quickfacts/fact/table/saltlakecountyutah/PST045224). The next assumption we make is those that are infected will remain infected for 4 weeks, after which they will be recovered. Finally, those once recovered will be resilient, and hence will not be susceptible to the diseases again. Using these assumptions, the 3 population data can be gerenated as follows:
+
+```
+P_total = 1e6
+
+I_data = np.array([sum(case_count_data[:k]) for k in range(1, 4)] + \
+                  [sum(case_count_data[k:k+4]) for k in range(len(case_count_data) - 3)])
+R_data = np.array([0, 0, 0] + [sum(case_count_data[:k]) for k in range(len(case_count_data) - 3)])
+
+I_data = I_data / P_total
+R_data = R_data / P_total
+S_data = 1 - I_data - R_data
+```
 
 
