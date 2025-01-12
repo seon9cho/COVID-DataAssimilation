@@ -189,9 +189,9 @@ In this project, we apply the data assimilation techinques outlined in the previ
 
 The data used for COVID modeling is the summary of new cases per week from the Salt Lake County. This data simply tells us how many new COVID cases occurred during a specified week, between March of 2020 all the way up til September of 2023. For this project, however, only the data up til December 12th of 2021 was used as the training data, and the 5 weeks between December 19th of 2021 to January 19th of 2022 was used as the test data. There was an abnormally high spike in COVID cases during that time as a result of winter holidays, and the task was to see whether it was possible to predict that given the potential spike that happened the year before. 
 
-### SIR Model 
-
 <img align="right" src="graphics/modified/gen_SIR_data.png" width="400">
+
+### SIR Model 
 
 For this task, the same SIR model that was outlined in the previous section is used to model the Salt Lake County population with one small change: the parameters $k$ and $q$ are now treated as functions of time, $k(t)$ and $q(t)$ instead as a scalar value. Now, in order to use the SIR model, we must have datapoints for the S, I, and R populations. However, since we only have data for the new cases of a given week, we must generate the 3 population data. 
 
