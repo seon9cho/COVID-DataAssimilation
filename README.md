@@ -179,9 +179,9 @@ $`
 
 Using these gradient values, the parameters can be found numerically by using gradient descent algorithm.
 
-## [COVID Data Model 1](SIR_COVID1.ipynb)
+## [COVID Data - SIR Model](SIR_COVID1.ipynb)
 
-The objective of this project is to use the Salt Lake County COVID data to see if the final model could predict the holiday spike of COVID cases that occured in the weeks between December of 2021 and January of 2022. 
+In this project, we apply the data assimilation techinques outlined in the previous section on a real world data, specifically the COVID-19 data from the Salt Lake County. This data is open source and is availalbe online. The objective of this project is to use the Salt Lake County COVID data to see if the final model could predict the holiday spike of COVID cases that occured in the weeks between December of 2021 and January of 2022. 
 
 <img align="right" src="graphics/new_case.png" width="400">
 
