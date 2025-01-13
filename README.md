@@ -177,7 +177,21 @@ $`
 \end{align}
 `$
 
-Using these gradient values, the parameters can be found numerically by using gradient descent algorithm.
+Using these gradient values, the parameters can be found numerically by using gradient descent algorithm. To achieve this, we must first find good initial guess values for the desired parameters $k$, $q$, $S_0$, $I_0$, and $R_0$. Because the algorithm is so reliant on having a good starting point, it may take a very long time, or even fail to converge with a poor initial guess. Hence, it is very important to come up with methods with available data that can help find a good initial guess. In some sense, the algorithm can be viewed as more of a fine-tuning mechanism rather than a robust learning machine. Once a good initial values for each parameters are found, they can be updated iteratively using the gradients found above.
+
+$`
+\begin{align}
+  \begin{split}
+    k &\leftarrow k - \lambda_k \nabla_{k} J\\
+    q &\leftarrow q - \lambda_q \nabla_{q} J\\
+    I_0 &\leftarrow I_0 - \lambda_{I_0} (\nabla_{I_0} J - \nabla_{S_0} J)\\
+    R_0 &\leftarrow R_0 - \lambda_{R_0} (\nabla_{R_0} J - \nabla_{S_0} J)\\
+    S_0 &\leftarrow 1 - I_0 - R_0
+  \end{split}
+\end{align}
+`$
+
+Each $\lambda$ represents the learning rate at which the parameters are updated. The learning rates of each parameter may be the same, or they may vary for more optimal learning. In addition, we assume the data starts at the beginning of the infection, hence $R_0$ should always be 0. This simplifies the parameters for the initial guess, only having to rely on the $I_0$ value.
 
 ## [COVID Data - SIR Model](SIR_COVID1.ipynb)
 
@@ -195,7 +209,7 @@ The data used for COVID modeling is the summary of new cases per week from the S
 
 For this task, the same SIR model that was outlined in the previous section is used to model the Salt Lake County population with one small change: the parameters $k$ and $q$ are now treated as functions of time, $k(t)$ and $q(t)$ instead as a scalar value. Now, in order to use the SIR model, we must have datapoints for the $S$, $I$, and $R$ populations. However, since we only have data for the new cases of a given week, we must generate the 3 population data. 
 
-Since the new cases data only those that are newly infected in a specified week, it can be interpreted as the $`-S\,'`$ data. From this, we can generate the desired $S$, $I$, and $R$ data with a few simple assumptions. The first assumption we make is that the total population of the Salt Lake County is 1 million. This is a round down estimate of the 2020 [census](https://www.census.gov/quickfacts/fact/table/saltlakecountyutah/PST045224). The next assumption we make is those that are infected will remain infected for 4 weeks, after which they will be recovered. Finally, those once recovered will be resilient, and hence will not be susceptible to the diseases again. Using these assumptions, the 3 population data can be gerenated as follows:
+Since the new cases data only those that are newly infected in a specified week, it can be interpreted as the $`-S\,'`$ data. From this, we can generate the desired $S$, $I$, and $R$ data with a few simple assumptions. The first assumption we make is that the total population of the Salt Lake County is 1 million. This is a round down estimate of the 2020 [census](https://www.census.gov/quickfacts/fact/table/saltlakecountyutah/PST045224). The next assumption we make is those that are infected will remain infected for 4 weeks, after which they will be recovered. Finally, those once recovered will be resilient, and hence will not be susceptible to the diseases again. With these assumptions, the 3 population data can be gerenated as follows:
 
 ```
 P_total = 1e6
@@ -222,7 +236,11 @@ $`
 k(t) = c + {\Large\sum}_{n=1}^N a_n \text{cos}(2\pi nt/52) + b_n \text{sin}(2\pi nt/52)
 `$
 
-and similarly for $q(t)$. In order for the algorithm to have a good fit, we must have a good initial guess for these two functions. This can be done by generating data points for $k(t)$ and $q(t)$ which can be solved for in the SIR model.
+and similarly for $q(t)$. 
+
+### Strategies for finding a good initial guess
+
+In order for the algorithm to have a good fit, we must have a good initial guess for these two functions. This can be done by generating data points for $k(t)$ and $q(t)$ which can be solved for in the SIR model.
 
 $`
 \begin{align}
