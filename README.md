@@ -193,9 +193,9 @@ The data used for COVID modeling is the summary of new cases per week from the S
 
 ### SIR Model 
 
-For this task, the same SIR model that was outlined in the previous section is used to model the Salt Lake County population with one small change: the parameters $k$ and $q$ are now treated as functions of time, $k(t)$ and $q(t)$ instead as a scalar value. Now, in order to use the SIR model, we must have datapoints for the S, I, and R populations. However, since we only have data for the new cases of a given week, we must generate the 3 population data. 
+For this task, the same SIR model that was outlined in the previous section is used to model the Salt Lake County population with one small change: the parameters $k$ and $q$ are now treated as functions of time, $k(t)$ and $q(t)$ instead as a scalar value. Now, in order to use the SIR model, we must have datapoints for the $S$, $I$, and $R$ populations. However, since we only have data for the new cases of a given week, we must generate the 3 population data. 
 
-Since the new cases data only those that are newly infected in a specified week, it can be interpreted as the $-S\,'$ data. From this, we can generate the desired S, I, and R data with a few simple assumptions. The first assumption we make is that the total population of the Salt Lake County is 1 million. This is a round down estimate of the 2020 [census](https://www.census.gov/quickfacts/fact/table/saltlakecountyutah/PST045224). The next assumption we make is those that are infected will remain infected for 4 weeks, after which they will be recovered. Finally, those once recovered will be resilient, and hence will not be susceptible to the diseases again. Using these assumptions, the 3 population data can be gerenated as follows:
+Since the new cases data only those that are newly infected in a specified week, it can be interpreted as the $`-S\,'`$ data. From this, we can generate the desired $S$, $I$, and $R$ data with a few simple assumptions. The first assumption we make is that the total population of the Salt Lake County is 1 million. This is a round down estimate of the 2020 [census](https://www.census.gov/quickfacts/fact/table/saltlakecountyutah/PST045224). The next assumption we make is those that are infected will remain infected for 4 weeks, after which they will be recovered. Finally, those once recovered will be resilient, and hence will not be susceptible to the diseases again. Using these assumptions, the 3 population data can be gerenated as follows:
 
 ```
 P_total = 1e6
@@ -209,4 +209,5 @@ R_data = R_data / P_total
 S_data = 1 - I_data - R_data
 ```
 
+Using the generated data, we must now create a callable function in the time domain as our observation functions, since we need to have $I^{obs}(t)$ and $R^{obs}(t)$ for our cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$. This function should match the behavior from the data as closely as possible, while not being too ill-conditioned. To do this, we model the observation functions as $n$-degree polynomials, and fit it to our data. We chose $n=20$.
 
