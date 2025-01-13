@@ -209,5 +209,39 @@ R_data = R_data / P_total
 S_data = 1 - I_data - R_data
 ```
 
-Using the generated data, we must now create a callable function in the time domain as our observation functions, since we need to have $I^{obs}(t)$ and $R^{obs}(t)$ for our cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$. This function should match the behavior from the data as closely as possible, while not being too ill-conditioned. To do this, we model the observation functions as $n$-degree polynomials, and fit it to our data. We chose $n=20$.
+Using the generated data, we must now create a callable function in the time domain as our observation functions, since we need to have $I^{obs}(t)$ and $R^{obs}(t)$ for our cost functional $`J = \frac{1}{2} {\large\int}_\tau (I - I^{obs})^2 + (R - R^{obs})^2 dt`$. This function should match the behavior from the data as closely as possible, while not being too ill-conditioned. To do this, we model the observation functions as an $n^{\text{th}}$-degree polynomials, and fit it to our data, i.e. $`I^{obs}(t) = a_n t^{n} + a_{n-1} t^{n-1} + ... + a_1 t + a_0`$ and similarly for $R^{obs}$. We chose $n=20$. 
+
+<div align="center">
+  
+  <img src="graphics/modified/obs_vs_data.png" width="500">
+</div>
+
+Next, we attempt to model the parameter functions $k(t)$ and $q(t)$. These functions are modeled using Fourier bases functions, with periodicity of 52. This is based on the assumption that different times of the year will affect the infection rate, but the same trend will continue from year to year. Hence, the functions will look as follows:
+
+$`
+k(t) = c + {\Large\sum}_{n=1}^N a_n \text{cos}(2\pi nt/52) + b_n \text{sin}(2\pi nt/52)
+`$
+
+and similarly for $q(t)$. In order for the algorithm to have a good fit, we must have a good initial guess for these two functions. This can be done by generating data points for $k(t)$ and $q(t)$ using the SIR model. First, we solve for $k$ and $q$, which gives us
+
+$`
+\begin{align}
+  \begin{split}
+    S\,' = -k(t)SI &\implies k(t) = -\frac{S\,'}{SI}\\
+    R\,' = q(t)I &\implies q(t) = \frac{R\,'}{I}
+  \end{split}
+\end{align}
+`$
+
+Since we have generated data for $S$, $I$, and $R$, we just need to generate data for $S\,'$ and $R\,'$ using it. This can be done simply by taking the difference between the values of the current week and the previous week, for all weeks. We can then generate the data points for $k(t)$ and $q(t)$ by following the formula above.
+
+```
+S_t = S_data[1:] - S_data[:-1]
+R_t = R_data[1:] - R_data[:-1]
+
+k_data = -S_t / (S_data[1:]*I_data[:-1])
+# The behavior of the first couple weeks are normalized
+k_data[:4] = np.mean(k_data[5:])
+q_data = R_t / I_data[1:]
+```
 
