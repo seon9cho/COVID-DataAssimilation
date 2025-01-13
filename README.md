@@ -233,7 +233,7 @@ $`
 \end{align}
 `$
 
-To satisfy the RHS of the equations above, the $S\,'$ and $R\,'$ data is generated using the existing $S$ and $R$ data. This is done simply by taking the difference between the values of the current week and the previous week, for all weeks. We then generate the data points for $k(t)$ and $q(t)$ by following the formula above. Below is a code snippet that shows how this is done with Numpy arrays:
+To satisfy the RHS of the equations above, the $S\,'$ and $R\,'$ data are generated using the existing $S$ and $R$ data. This is done by taking the difference between the values of the current week and the previous week, for all weeks. We then generate the data points for $k(t)$ and $q(t)$ by following the formula above. Below is a code snippet that shows how this is done with Numpy arrays:
 
 ```
 S_t = S_data[1:] - S_data[:-1]
