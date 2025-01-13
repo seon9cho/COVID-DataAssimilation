@@ -222,7 +222,7 @@ $`
 k(t) = c + {\Large\sum}_{n=1}^N a_n \text{cos}(2\pi nt/52) + b_n \text{sin}(2\pi nt/52)
 `$
 
-and similarly for $q(t)$. In order for the algorithm to have a good fit, we must have a good initial guess for these two functions. This can be done by generating data points for $k(t)$ and $q(t)$ using the SIR model. First, we solve for $k$ and $q$, which gives us
+and similarly for $q(t)$. In order for the algorithm to have a good fit, we must have a good initial guess for these two functions. This can be done by generating data points for $k(t)$ and $q(t)$ which can be solved for in the SIR model.
 
 $`
 \begin{align}
@@ -233,15 +233,21 @@ $`
 \end{align}
 `$
 
-Since we have generated data for $S$, $I$, and $R$, we just need to generate data for $S\,'$ and $R\,'$ using it. This can be done simply by taking the difference between the values of the current week and the previous week, for all weeks. We can then generate the data points for $k(t)$ and $q(t)$ by following the formula above.
+To satisfy the RHS of the equations above, the $S\,'$ and $R\,'$ data is generated using the existing $S$ and $R$ data. This is done simply by taking the difference between the values of the current week and the previous week, for all weeks. We then generate the data points for $k(t)$ and $q(t)$ by following the formula above. Below is a code snippet that shows how this is done with Numpy arrays:
 
 ```
 S_t = S_data[1:] - S_data[:-1]
 R_t = R_data[1:] - R_data[:-1]
 
+# The behavior of the first couple weeks are normalized since R and I values are (close to) 0
 k_data = -S_t / (S_data[1:]*I_data[:-1])
-# The behavior of the first couple weeks are normalized
 k_data[:4] = np.mean(k_data[5:])
 q_data = R_t / I_data[1:]
+q_data[:6] = np.mean(q_data)
 ```
+
+
+
+
+
 
