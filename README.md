@@ -245,9 +245,10 @@ k_data[:4] = np.mean(k_data[5:])
 q_data = R_t / I_data[1:]
 q_data[:6] = np.mean(q_data)
 ```
+<div align="center">
 
-
-
+  <img src="graphics/modified/k_data_plot.png" width=400> <img src="graphics/modified/q_data_plot.png" width=400>
+</div>
 
 
 
