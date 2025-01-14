@@ -304,4 +304,16 @@ $`
 \end{align}
 `$
 
-The process for finding the gradients of the coefficients of $q(t)$ is identical. 
+The process for finding the gradients of the coefficients of $q(t)$ is identical. With all the gradients solved, the gradient descent algorithm is as simple as following these steps:
+
+- Record the current cost
+- Solve for the adjoint problem using the current parameter values
+- Find the gradients of each of the parameters
+- Update the parameters using the gradients found and a predefined learning rate
+- Repeat until convergence
+
+For this problem, we used a learning rate of 1e-4 for the coefficients of $k$ and $q$, and 1e-7 for the initial value parameters. Convergence was reached after around 450 iterations.
+
+
+
+
