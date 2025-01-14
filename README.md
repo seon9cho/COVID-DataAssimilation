@@ -280,6 +280,8 @@ Next, we want to find a good initial guess for the parameters $S_0$, $I_0$, and 
 
 ### Gradient Descent
 
+<img align="right" src="graphics/modified/cost_graph.png" width=400>
+
 Now that we have decent initial guess for each of the parameters, we are ready to perform the gradient descent algorithm in order to fine-tune these values. The gradient of these parameters are derived from the cost functional, which integrates over time. Hence, our final output will be a function that has been "assimilated" with the data. These gradients are equivalent to the ones we found for the simple case in the previous section. The one difference is that the parameters $k$ and $q$ are now functions of time, and we have modeled them using Fourier basis function. Recall that $k(t)$ is modeled as:
 
 $`
@@ -304,8 +306,6 @@ $`
 \end{align}
 `$
 
-<img align="right" src="graphics/modified/cost_graph.png" width=400>
-
 The process for finding the gradients of the coefficients of $q(t)$ is identical. With all the gradients solved, the gradient descent algorithm is as simple as following these steps:
 
 - Record the current cost
@@ -316,6 +316,10 @@ The process for finding the gradients of the coefficients of $q(t)$ is identical
 
 For this problem, we used a learning rate of 1e-4 for the coefficients of $k$ and $q$, and 1e-7 for the initial value parameters. Convergence was reached after around 450 iterations. Below shows how well the $I$ and $R$ functions fit with the data and the observation functions.
 
+<div align="center">
+
+  <img src="graphics/modified/fit_vs_obs.png" width=400> <img src="graphics/modified/fit_vs_data.png" width=400>
+</div>
 
 
 
