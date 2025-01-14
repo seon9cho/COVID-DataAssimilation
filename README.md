@@ -263,10 +263,13 @@ k_data[:4] = np.mean(k_data[5:])
 q_data = R_t / I_data[1:]
 q_data[:6] = np.mean(q_data)
 ```
+
+We then numerically fit a Fourier bases function to the data to find a decent initial guess functions for the parameters $k(t)$ and $q(t)$. This is done using the curve_fit function from the scipy.optimize package. 
+
 <div align="center">
 
   <img src="graphics/modified/k_data_plot.png" width=400> <img src="graphics/modified/q_data_plot.png" width=400>
 </div>
 
-
+Next, we want to find a good initial guess for the parameters $S_0$, $I_0$, and $R_0$. This is done through more of a trial and error, where we pick a reasonable initial values and run them through the SIR model. Since we have generated a close approximation for the $k(t)$ and $q(t)$ parameter functions, a decent initial guess should yield a decent fit with the data. The differential equation can be numerically solved using the solve_ivp function from the scipy.integrate package. 
 
