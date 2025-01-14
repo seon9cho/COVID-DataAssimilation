@@ -325,7 +325,7 @@ The resulting solutions for the SIR model is used to predict the next couple dat
 
 <div align="center">
 
-  <img src="graphics/modified/SIR1_pred1.png" width=400> <img src="graphics/modified/SIR2_pred2.png" width=400>
+  <img src="graphics/modified/SIR1_pred1.png" width=400> <img src="graphics/modified/SIR1_pred2.png" width=400>
 </div>
 
 
