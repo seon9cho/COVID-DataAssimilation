@@ -314,7 +314,9 @@ The process for finding the gradients of the coefficients of $q(t)$ is identical
 - Update the parameters using the gradients found and a predefined learning rate
 - Repeat until convergence
 
-For this problem, we used a learning rate of 1e-4 for the coefficients of $k$ and $q$, and 1e-7 for the initial value parameters. Convergence was reached after around 450 iterations.
+For this problem, we used a learning rate of 1e-4 for the coefficients of $k$ and $q$, and 1e-7 for the initial value parameters. Convergence was reached after around 450 iterations. Below shows how well the $I$ and $R$ functions fit with the data and the observation functions.
+
+
 
 
 
