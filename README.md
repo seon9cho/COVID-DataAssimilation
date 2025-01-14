@@ -304,4 +304,4 @@ $`
 \end{align}
 `$
 
-The process for the coefficients of $q(t)$ is identical. 
+The process for finding the gradients of the coefficients of $q(t)$ is identical. 
