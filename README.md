@@ -321,6 +321,16 @@ For this problem, we used a learning rate of 1e-4 for the coefficients of $k$ an
   <img src="graphics/modified/fit_vs_obs.png" width=400> <img src="graphics/modified/fit_vs_data.png" width=400>
 </div>
 
+The resulting solutions for the SIR model is used to predict the next couple data points and compared with the test set. Two different methods were used for prediction. The first is by simply using the solved SIR model and inserting the weeks for December 12, 2021 - January 12, 2022 on the model which produces an output. This can be compared with the 4 week rolling sum of the case count data, which is how the total number of infected is calculated. The other method is to use the generated data for $I(t)$ and $S(t)$ at the week of December 12, 2021, and multiplying them with $k(t)$. Recall that new cases corresponds to $-S\,'$, which equals to $k(t) SI$. Therefore, this yields the predictions for the new cases for December 19, 2021. This method can be continued by iteratively updating the values for I(t+1) and S(t+1) in order to predict up to January 16, 2022. Below shows the results for both prediction:
+
+<div align="center">
+
+  <img src="graphics/modified/SIR1_pred1.png" width=400> <img src="graphics/modified/SIR2_pred2.png" width=400>
+</div>
+
+
+It’s quite evident that although the model is very good at fitting the given data, it fails to predict the sudden spike during Christmas season. This is to be expected since there wasn't enough data to begin with (most of the data had to be generated from 1 data). Also, the occurrence of the spike is quite unforeseen. 
+
 
 
 
