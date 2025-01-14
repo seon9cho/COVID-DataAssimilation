@@ -278,6 +278,8 @@ Next, we want to find a good initial guess for the parameters $S_0$, $I_0$, and 
   <img src="graphics/modified/IR_initial.png" width=500>
 </div>
 
+### Gradient Descent
+
 Now that we have decent initial guess for each of the parameters, we are ready to perform the gradient descent algorithm in order to fine-tune these values. The gradient of these parameters are derived from the cost functional, which integrates over time. Hence, our final output will be a function that has been "assimilated" with the data. These gradients are equivalent to the ones we found for the simple case in the previous section. The one difference is that the parameters $k$ and $q$ are now functions of time, and we have modeled them using Fourier basis function. Recall that $k(t)$ is modeled as:
 
 $`
@@ -287,7 +289,19 @@ k(t) = c + {\Large\sum}_{n=1}^N a_n \text{cos}(2\pi nt/52) + b_n \text{sin}(2\pi
 Also recall that the gradient of $k$ is the following:
 
 $`
-\nabla_{k} J &= {\large\int}_\tau SI (p_S - p_I) \,dt
+\nabla_{k} J = {\large\int}_\tau SI (p_S - p_I) \,dt
 `$
 
+Using these two facts, we can solve for the gradients of each of the coefficients, $c$, $a_n$, and $b_n$, then use the resulting gradients to update each coefficient independently. The resulting gradients of the coefficients are as follows:
 
+$`
+\begin{align} 
+  \begin{split} 
+    \nabla_{c} J &= \nabla_{k} J\\
+    \nabla_{a_n} J &= {\large\int}_\tau SI (p_S - p_I)\, \text{cos}(2\pi nt/52 \,dt\\
+    \nabla_{b_n} J &= {\large\int}_\tau SI (p_S - p_I)\, \text{sin}(2\pi nt/52 \,dt
+  \end{split}
+\end{align}
+`$
+
+The process for the coefficients of $q(t)$ is identical. 
