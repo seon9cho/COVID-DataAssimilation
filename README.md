@@ -304,6 +304,8 @@ $`
 \end{align}
 `$
 
+<img align="right" src="graphics/modified/cost_graph.png" width=400>
+
 The process for finding the gradients of the coefficients of $q(t)$ is identical. With all the gradients solved, the gradient descent algorithm is as simple as following these steps:
 
 - Record the current cost
@@ -313,6 +315,7 @@ The process for finding the gradients of the coefficients of $q(t)$ is identical
 - Repeat until convergence
 
 For this problem, we used a learning rate of 1e-4 for the coefficients of $k$ and $q$, and 1e-7 for the initial value parameters. Convergence was reached after around 450 iterations.
+
 
 
 
