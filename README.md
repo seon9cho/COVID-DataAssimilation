@@ -199,11 +199,15 @@ Each $\lambda$ represents the learning rate at which the parameters are updated.
 
 In this project, we apply the data assimilation techniques outlined in the previous section on real world data, specifically the COVID-19 data from Salt Lake County. This data is open source and is available online. The objective of this project is to use the Salt Lake County COVID data to see if the final model could predict the holiday spike of COVID cases that occurred in the weeks between December of 2021 and January of 2022. 
 
+<br>
+
 ### Details of the data
 
 The data used for COVID modeling is the summary of new cases per week from Salt Lake County. This data simply tells us how many new COVID cases occurred during a specified week, between March of 2020 up tol September of 2023. For this project, however, only the data up tol December 12th of 2021 was used as the training data, and the 5 weeks between December 19th of 2021 to January 19th of 2022 was used as the test data. There was an abnormally high spike in COVID cases during that time as a result of winter holidays, and the task was to see whether it was possible to predict that given the potential spike that happened the year before. 
 
 <img align="right" src="graphics/modified/gen_SIR_data.png" width="400">
+
+<br>
 
 ### SIR Model 
 
@@ -238,6 +242,8 @@ k(t) = c + {\Large\sum}_{n=1}^N a_n \text{cos}(2\pi nt/52) + b_n \text{sin}(2\pi
 
 and similarly for $q(t)$. 
 
+<br>
+
 ### Strategies for finding a good initial guess
 
 In order for the algorithm to have a good fit, we must have a good initial guess for these two functions. This can be done by generating data points for $k(t)$ and $q(t)$ which can be solved for in the SIR model.
@@ -264,14 +270,14 @@ q_data = R_t / I_data[1:]
 q_data[:6] = np.mean(q_data)
 ```
 
-We then numerically fit a Fourier basis function to the data to find a decent initial guess function for the parameters $k(t)$ and $q(t)$. This is done using the curve_fit function from the scipy.optimize package. 
+We then numerically fit a Fourier basis function to the data to find a decent initial guess function for the parameters $k(t)$ and $q(t)$. This is done using the `curve_fit` function from the `scipy.optimize` package. 
 
 <div align="center">
 
   <img src="graphics/modified/k_data_plot.png" width=400> <img src="graphics/modified/q_data_plot.png" width=400>
 </div>
 
-Next, we want to find a good initial guess for the parameters $S_0$, $I_0$, and $R_0$. This is done through more of a trial-and-error process, where we pick reasonable initial values and run them through the SIR model to see how well it fits with the data. Since we have generated a close approximation for the $k(t)$ and $q(t)$ parameter functions, a decent initial guess should yield a decent fit with the data. The differential equation can be numerically solved using the solve_ivp function from the scipy.integrate package. 
+Next, we want to find a good initial guess for the parameters $S_0$, $I_0$, and $R_0$. This is done through more of a trial-and-error process, where we pick reasonable initial values and run them through the SIR model to see how well it fits with the data. Since we have generated a close approximation for the $k(t)$ and $q(t)$ parameter functions, a decent initial guess should yield a decent fit with the data. The differential equation can be numerically solved using the `solve_ivp` function from the `scipy.integrate` package. 
 
 <div align="center">
 
